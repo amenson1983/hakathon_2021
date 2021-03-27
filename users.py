@@ -102,7 +102,12 @@ class CDoctor_cabinet:
         doc_stat_ = doc_w.log_in_to_system(login, password)
         if doc_stat_ == True:
             print('OK Doc')
-
+class CProvisor_cabinet:
+    def enter_provisor_the_cabinet(self,login1, password1):
+        doc_w = CProvisor_workout()
+        doc_stat_ = doc_w.log_in_to_system1(login1, password1)
+        if doc_stat_ == True:
+            print('OK Provisor')
 class CDoctor_workout:
     def get_logins_passwords_dict(self):
         with sqlite3.connect(server_local) as conn:
@@ -207,3 +212,5 @@ if __name__ == '__main__':
 
     doc_enter = CDoctor_cabinet()
     doc_enter.enter_the_cabinet(login, password)
+    prov_enter = CProvisor_cabinet()
+    prov_enter.enter_provisor_the_cabinet(login1, password1)
