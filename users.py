@@ -92,7 +92,18 @@ class CProvisor_workout():
         logins_password_list_from_base1 = prov.get_logins_passwords_dict1()
         print(logins_password_list_from_base1)
         entering = Clogging_workout()
-        entering.logging_to_system1(login1, password1, logins_password_list_from_base1)
+        status = entering.logging_to_system1(login1, password1, logins_password_list_from_base1)
+        return status
+
+class CDoctor_cabinet:
+    def enter_the_cabinet(self):
+        doc_w = CDoctor_workout()
+        logins_dict = doc_w.get_logins_passwords_dict()
+        doc_w.registration(logins_dict, surname, name, father_name, adress, phone, doc_speciality, hospital_name,
+                           hospital_adress, login, password)
+        doc_stat_ = doc_w.log_in_to_system(login, password)
+        if doc_stat_ == True:
+            print('OK Doc')
 
 class CDoctor_workout:
     def get_logins_passwords_dict(self):
@@ -127,7 +138,8 @@ class CDoctor_workout:
         logins_password_list_from_base = doc_w.get_logins_passwords_dict()
         print(logins_password_list_from_base)
         entering = Clogging_workout()
-        entering.logging_to_system(login, password, logins_password_list_from_base)
+        status = entering.logging_to_system(login, password, logins_password_list_from_base)
+        return status
 
 
 class Clogging:
@@ -139,15 +151,15 @@ class Clogging_workout:
     def logging_to_system(self,login,password,logins_dict):
         if login in logins_dict:
             if str(password) == logins_dict[login]:
-                print('OK')
-            else: print('Password is incorrect')
-        else: print('No such user')
+                return True
+            else: return False
+        else: return False
     def logging_to_system1(self,login1,password1,logins_dict):
         if login1 in logins_dict:
             if str(password1) == logins_dict[login1]:
-                print('OK')
-            else: print('Password is incorrect')
-        else: print('No such user')
+                return True
+            else: return False
+        else: return False
 
 
 
@@ -188,16 +200,12 @@ if __name__ == '__main__':
     #customer = CCustomer(surname,name,father_name,phone,id_card)
     #print(customer)
 
-    doc_w = CDoctor_workout()
-    logins_dict = doc_w.get_logins_passwords_dict()
-    doc_w.registration(logins_dict, surname, name, father_name, adress, phone, doc_speciality, hospital_name,
-                 hospital_adress, login, password)
-    doc_w.log_in_to_system(login, password)
-
-
     prov = CProvisor_workout()
     logins_dict1 = {}
 
     prov.registration1(logins_dict1,surname1,name1,father_name1,adress1,phone1,id_card1,pharmacy_name1,pharmacy_adress1,login1,password1)
     logins_dict1 = prov.get_logins_passwords_dict1()
-    prov.log_in_to_system1(login1, password1)
+    prov_stat = prov.log_in_to_system1(login1, password1)
+
+    doc_enter = CDoctor_cabinet()
+    doc_enter.enter_the_cabinet()
