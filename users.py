@@ -1,3 +1,11 @@
+import sqlite3
+import logging
+server_local = "hakaton_base.db"
+
+
+
+
+logging.basicConfig(filename='process_flow.log', level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %I:%M:%S %p')
 
 
 class CUser:
@@ -50,22 +58,38 @@ class CCustomer:
         return f"Фамилия: {self.surname}\nИмя: {self.name}\nОтчество: {self.father_name}\nТел.:{self.phone}\nID: {self.id_number_or_passport}"
 
 class CDoctor_workout:
+    def get_logins_passwords_dict(self):
+        with sqlite3.connect(server_local) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                f"select logins_passwords.login, logins_passwords.password from logins_passwords")
+            results = cursor.fetchall()
+            print(results)
     def registration(self,logins_dict,surname,name,father_name,adress,phone,doc_speciality,hospital_name,hospital_adress,login,password):
         x = CDoctor(surname,name,father_name,adress,phone,doc_speciality,hospital_name,hospital_adress,login,password)
         if x.login in logins_dict:
             print('try again')
         else: logins_dict.update({x.login:x.password})
-        return logins_dict
+        if x.login not in logins_dict:
+            with sqlite3.connect(server_local) as conn:
+                logging.info("Connecting to 'hakaton_base.db' - OK")
+                cursor = conn.cursor()
+                #cursor.execute("DROP TABLE logins_passwords")
+                cursor.execute("CREATE TABLE IF NOT EXISTS logins_passwords (login,password);")
+                logging.info("Creating the table 'logins_passwords' at 'hakaton_base.db' - OK")
 
-
+                strin = [x.login,x.password]
+                cursor.execute("INSERT INTO logins_passwords VALUES (?,?);",strin)
+                conn.commit()
+                logging.info("'logins_passwords'  - OK")
 
 
 class Clogging:
     def __init__(self,login,password):
         self.login = login
         self.password = password
-class Clogging_workout:
 
+class Clogging_workout:
     def logging_to_system(self,login,password,logins_dict):
         if login in logins_dict:
             if password == logins_dict[password]:
@@ -96,5 +120,10 @@ if __name__ == '__main__':
     #print(doc)
     #provisor = CProvisor(surname,name,father_name,adress,phone,id_card,pharmacy_name,pharmacy_adress)
     #print(provisor)
-    customer = CCustomer(surname,name,father_name,phone,id_card)
-    print(customer)
+    #customer = CCustomer(surname,name,father_name,phone,id_card)
+    #print(customer)
+    logins_dict = {}
+    doc_w = CDoctor_workout()
+    doc_w.registration(logins_dict, surname, name, father_name, adress, phone, doc_speciality, hospital_name,
+                 hospital_adress, login, password)
+    doc_w.get_logins_passwords_dict()
