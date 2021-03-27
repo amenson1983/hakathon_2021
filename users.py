@@ -35,19 +35,19 @@ class CDoctor():
 
 class CProvisor:
     def __init__(self,surname,name,father_name,adress,phone,id_card,pharmacy_name,pharmacy_adress,login,password):
-        self.password = password
-        self.login = login
-        self.pharmacy_adress = pharmacy_adress
-        self.pharmacy_name = pharmacy_name
-        self.id_card = id_card
-        self.surname = surname
-        self.name = name
-        self.father_name = father_name
-        self.adress = adress
-        self.phone = phone
+        self.password1 = password
+        self.login1 = login
+        self.pharmacy_adress1 = pharmacy_adress
+        self.pharmacy_name1 = pharmacy_name
+        self.id_card1 = id_card
+        self.surname1 = surname
+        self.name1 = name
+        self.father_name1 = father_name
+        self.adress1 = adress
+        self.phone1 = phone
 
     def __str__(self):
-        return f"Фамилия: {self.surname}\nИмя: {self.name}\nОтчество: {self.father_name}\nАдрес: {self.adress}\nТел.:{self.phone}\nID провизора:{self.id_card}\nАптека:{self.pharmacy_name}\nАптека адрес: {self.pharmacy_adress}"
+        return f"Фамилия: {self.surname1}\nИмя: {self.name1}\nОтчество: {self.father_name1}\nАдрес: {self.adress1}\nТел.:{self.phone1}\nID провизора:{self.id_card1}\nАптека:{self.pharmacy_name1}\nАптека адрес: {self.pharmacy_adress1}"
 
 class CCustomer:
     def __init__(self, surname,name,father_name,phone,id_number_or_passport):
@@ -68,24 +68,24 @@ class CProvisor_workout():
             results = cursor.fetchall()
             results_classifyed = {}
             for i in results:
-                classif_string = Clogging(i[0], i[1])
-                results_classifyed.update({classif_string.login:classif_string.password})
+                classif_string = Clogging1(i[0], i[1])
+                results_classifyed.update({classif_string.login1:classif_string.password1})
             return results_classifyed
 
-    def registration1(self,logins_dict1,surname,name,father_name,adress,phone,id_card,pharmacy_name,pharmacy_adress,login,password):
-        x = CProvisor(surname,name,father_name,adress,phone,id_card,pharmacy_name,pharmacy_adress,login,password)
+    def registration1(self,logins_dict1,surname1,name1,father_name1,adress1,phone1,id_card1,pharmacy_name1,pharmacy_adress1,login1,password1):
+        x = CProvisor(surname1,name1,father_name1,adress1,phone1,id_card1,pharmacy_name1,pharmacy_adress1,login1,password1)
 
 
 
-        if x.login not in logins_dict1:
+        if x.login1 not in logins_dict1:
             with sqlite3.connect(server_local) as conn:
-                logins_dict1.update({x.login: x.password})
+                logins_dict1.update({x.login1: x.password1})
                 logging.info("Connecting to 'hakaton_base.db' - OK")
                 cursor = conn.cursor()
                 #cursor.execute("DROP TABLE logins_passwords_provisor")
                 cursor.execute("CREATE TABLE IF NOT EXISTS logins_passwords_provisor (login1,password1);")
-                strin = [x.login,x.password]
-                cursor.execute("INSERT INTO logins_passwords_provisor VALUES (?,?);",strin)
+                strin1 = [x.login1,x.password1]
+                cursor.execute("INSERT INTO logins_passwords_provisor VALUES (?,?);",strin1)
                 conn.commit()
                 logging.info("'logins_passwords_provisor'  - OK")
         else: print('try again')
@@ -97,11 +97,8 @@ class CProvisor_workout():
         return status1
 
 class CDoctor_cabinet:
-    def enter_the_cabinet(self):
+    def enter_the_cabinet(self,login, password):
         doc_w = CDoctor_workout()
-        logins_dict = doc_w.get_logins_passwords_dict()
-        doc_w.registration(logins_dict, surname, name, father_name, adress, phone, doc_speciality, hospital_name,
-                           hospital_adress, login, password)
         doc_stat_ = doc_w.log_in_to_system(login, password)
         if doc_stat_ == True:
             print('OK Doc')
@@ -145,6 +142,10 @@ class Clogging:
     def __init__(self,login,password):
         self.login = login
         self.password = password
+class Clogging1:
+    def __init__(self,login1,password1):
+        self.login1 = login1
+        self.password1 = password1
 
 class Clogging_workout:
     def logging_to_system(self,login,password,logins_dict):
@@ -196,13 +197,13 @@ if __name__ == '__main__':
     doc_w.registration(logins_dict, surname, name, father_name, adress, phone, doc_speciality, hospital_name,
                        hospital_adress, login, password)
     doc_stat_ = doc_w.log_in_to_system(login, password)
-    print(doc_stat_)
-    prov = CProvisor_workout()
-    logins_dict1 = {}
 
-    prov.registration1(logins_dict1,surname1,name1,father_name1,adress1,phone1,id_card1,pharmacy_name1,pharmacy_adress1,login1,password1)
+    prov = CProvisor_workout()
+
+
+    #prov.registration1(logins_dict1,surname1,name1,father_name1,adress1,phone1,id_card1,pharmacy_name1,pharmacy_adress1,login1,password1)
     logins_dict1 = prov.get_logins_passwords_dict1()
     prov_stat = prov.log_in_to_system1(login1, password1)
-    print(prov_stat)
+
     doc_enter = CDoctor_cabinet()
-    doc_enter.enter_the_cabinet()
+    doc_enter.enter_the_cabinet(login, password)
