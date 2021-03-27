@@ -62,8 +62,9 @@ class CProvisor_workout():
     def get_logins_passwords_dict1(self):
         with sqlite3.connect(server_local) as conn:
             cursor = conn.cursor()
+
             cursor.execute(
-                f"select logins_passwords_provisor.login, logins_passwords_provisor.password from logins_passwords_provisor")
+                f"select logins_passwords_provisor.login1, logins_passwords_provisor.password1 from logins_passwords_provisor")
             results = cursor.fetchall()
             results_classifyed = {}
             for i in results:
@@ -71,22 +72,23 @@ class CProvisor_workout():
                 results_classifyed.update({classif_string.login:classif_string.password})
             return results_classifyed
 
-    def registration1(self,logins_dict,surname,name,father_name,adress,phone,id_card,pharmacy_name,pharmacy_adress,login,password):
+    def registration1(self,logins_dict1,surname,name,father_name,adress,phone,id_card,pharmacy_name,pharmacy_adress,login,password):
         x = CProvisor(surname,name,father_name,adress,phone,id_card,pharmacy_name,pharmacy_adress,login,password)
-        if x.login in logins_dict:
-            print('try again')
 
-        if x.login not in logins_dict:
+
+
+        if x.login not in logins_dict1:
             with sqlite3.connect(server_local) as conn:
-                logins_dict.update({x.login: x.password})
+                logins_dict1.update({x.login: x.password})
                 logging.info("Connecting to 'hakaton_base.db' - OK")
                 cursor = conn.cursor()
                 #cursor.execute("DROP TABLE logins_passwords_provisor")
-                cursor.execute("CREATE TABLE IF NOT EXISTS logins_passwords_provisor (login,password);")
+                cursor.execute("CREATE TABLE IF NOT EXISTS logins_passwords_provisor (login1,password1);")
                 strin = [x.login,x.password]
                 cursor.execute("INSERT INTO logins_passwords_provisor VALUES (?,?);",strin)
                 conn.commit()
-                logging.info("'logins_passwords'  - OK")
+                logging.info("'logins_passwords_provisor'  - OK")
+        else: print('try again')
     def log_in_to_system1(self, login1, password1):
         prov = CProvisor_workout()
         logins_password_list_from_base1 = prov.get_logins_passwords_dict1()
@@ -119,8 +121,6 @@ class CDoctor_workout:
 
     def registration(self,logins_dict,surname,name,father_name,adress,phone,doc_speciality,hospital_name,hospital_adress,login,password):
         x = CDoctor(surname,name,father_name,adress,phone,doc_speciality,hospital_name,hospital_adress,login,password)
-        if x.login in logins_dict:
-            print('try again')
         if x.login not in logins_dict:
             with sqlite3.connect(server_local) as conn:
                 logins_dict.update({x.login: x.password})
@@ -132,6 +132,7 @@ class CDoctor_workout:
                 cursor.execute("INSERT INTO logins_passwords VALUES (?,?);",strin)
                 conn.commit()
                 logging.info("'logins_passwords'  - OK")
+        else: print('try again')
     def log_in_to_system(self, login, password):
         doc_w = CDoctor_workout()
         logins_password_list_from_base = doc_w.get_logins_passwords_dict()
@@ -185,7 +186,7 @@ if __name__ == '__main__':
     hospital_adress1 = "hospital_adress1"
     hospital_name1 = "hospital_name1"
     doc_speciality1 = "doc_speciality1"
-    password1 = "1231"
+    password1 = "1232"
     id_card1 = '4441'
     pharmacy_name1 = 'Unknown1'
     pharmacy_adress1 = 'Unknown1'
