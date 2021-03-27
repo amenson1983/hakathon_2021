@@ -90,10 +90,9 @@ class CProvisor_workout():
     def log_in_to_system1(self, login1, password1):
         prov = CProvisor_workout()
         logins_password_list_from_base1 = prov.get_logins_passwords_dict1()
-        print(logins_password_list_from_base1)
         entering = Clogging_workout()
-        status = entering.logging_to_system1(login1, password1, logins_password_list_from_base1)
-        return status
+        status1 = entering.logging_to_system1(login1, password1, logins_password_list_from_base1)
+        return status1
 
 class CDoctor_cabinet:
     def enter_the_cabinet(self):
@@ -136,7 +135,6 @@ class CDoctor_workout:
     def log_in_to_system(self, login, password):
         doc_w = CDoctor_workout()
         logins_password_list_from_base = doc_w.get_logins_passwords_dict()
-        print(logins_password_list_from_base)
         entering = Clogging_workout()
         status = entering.logging_to_system(login, password, logins_password_list_from_base)
         return status
@@ -192,20 +190,18 @@ if __name__ == '__main__':
     pharmacy_name1 = 'Unknown1'
     pharmacy_adress1 = 'Unknown1'
     #user = CUser(surname,name,father_name,adress,phone)
-    #print(user.__str__())
-    #doc = CDoctor(surname,name,father_name,adress,phone,doc_speciality,hospital_name,hospital_adress,login,password)
-    #print(doc)
-    #provisor = CProvisor(surname,name,father_name,adress,phone,id_card,pharmacy_name,pharmacy_adress)
-    #print(provisor)
-    #customer = CCustomer(surname,name,father_name,phone,id_card)
-    #print(customer)
-
+    doc_w = CDoctor_workout()
+    logins_dict = doc_w.get_logins_passwords_dict()
+    doc_w.registration(logins_dict, surname, name, father_name, adress, phone, doc_speciality, hospital_name,
+                       hospital_adress, login, password)
+    doc_stat_ = doc_w.log_in_to_system(login, password)
+    print(doc_stat_)
     prov = CProvisor_workout()
     logins_dict1 = {}
 
     prov.registration1(logins_dict1,surname1,name1,father_name1,adress1,phone1,id_card1,pharmacy_name1,pharmacy_adress1,login1,password1)
     logins_dict1 = prov.get_logins_passwords_dict1()
     prov_stat = prov.log_in_to_system1(login1, password1)
-
+    print(prov_stat)
     doc_enter = CDoctor_cabinet()
     doc_enter.enter_the_cabinet()
