@@ -49,15 +49,23 @@ class CCustomer:
     def __str__(self):
         return f"Фамилия: {self.surname}\nИмя: {self.name}\nОтчество: {self.father_name}\nТел.:{self.phone}\nID: {self.id_number_or_passport}"
 
-#class CDoctor_workout:
-    #def registration(self):
-    #def login_to_system(self):
+class CDoctor_workout:
+    def registration(self,logins_dict,surname,name,father_name,adress,phone,doc_speciality,hospital_name,hospital_adress,login,password):
+        x = CDoctor(surname,name,father_name,adress,phone,doc_speciality,hospital_name,hospital_adress,login,password)
+        if x.login in logins_dict:
+            print('try again')
+        else: logins_dict.update({x.login:x.password})
+        return logins_dict
+
+
+
 
 class Clogging:
     def __init__(self,login,password):
         self.login = login
         self.password = password
 class Clogging_workout:
+
     def logging_to_system(self,login,password,logins_dict):
         if login in logins_dict:
             if password == logins_dict[password]:
